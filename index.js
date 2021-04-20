@@ -19,6 +19,9 @@ app.use(fileUpload());
 
 const port = process.env.PORT || 5000;
 
+app.get('/',(req,res)=>{
+  res.send('Working Fine');
+})
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 client.connect(err => {
