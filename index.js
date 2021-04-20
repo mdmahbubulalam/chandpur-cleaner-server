@@ -27,6 +27,8 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 client.connect(err => {
     const serviceCollection = client.db("chandpurCleaner").collection("services");
     const ordersCollection = client.db("chandpurCleaner").collection("orders");
+    const reviewsCollection = client.db("chandpurCleaner").collection("reviews");
+
 
   
     console.log('DB connected');
@@ -62,12 +64,26 @@ client.connect(err => {
     })
 
     app.get('/orders', (req,res) => {
-      console.log(req);
       ordersCollection.find({email:req.query.email})
       .toArray((err, items) => {
         res.send(items);
       })
     })
+
+    app.post('/addReview', (req,res) => {
+      const review = req.body;
+      reviewsCollection.insertOne(review)
+      .then(result => {
+          res.send(result.insertedCount > 0)
+      })
+  })
+
+  app.get('/reviews', (req,res) => {
+    reviewsCollection.find()
+    .toArray((err, items) => {
+      res.send(items);
+    })
+})
     
   });
 
